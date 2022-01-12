@@ -10,6 +10,7 @@ import (
 
 // Generic repo for our differents models
 type Repository interface {
+	Migrate(ctx context.Context, models interface{}) (bool, error)
 	Create(ctx context.Context, models interface{}) (string, error)
 	GetRows(ctx context.Context, models interface{}) (interface{}, error)
 	Get(ctx context.Context, models interface{}, fields map[string]interface{}) (interface{}, error)
@@ -30,6 +31,13 @@ func NewRepo(db *gorm.DB, logger log.Logger) Repository {
 		db:     db,
 		logger: logger,
 	}
+}
+
+func (repo *repo) Migrate(ctx context.Context, models interface{}) (bool, error) {
+	if err := repo.db.AutoMigrate(models); err != nil {
+		return false, err
+	}
+	return true, nil
 }
 
 // Create data from any given models
