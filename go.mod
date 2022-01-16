@@ -1,4 +1,4 @@
-module repository
+module github.com/iButcat/repository
 
 go 1.17
 
