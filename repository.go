@@ -18,6 +18,7 @@ type Repository interface {
 	First(ctx context.Context, models interface{}, id string) (interface{}, error)
 	FindAll(ctx context.Context, models interface{}, query string) (interface{}, error)
 	Update(ctx context.Context, models interface{}, id string, fields map[string]interface{}) (bool, error)
+	Updates(ctx context.Context, model, updaded interface{}) error
 	Delete(ctx context.Context, models interface{}, id string) (bool, error)
 }
 
@@ -107,6 +108,13 @@ func (repo *repo) Update(
 		}
 	}
 	return true, nil
+}
+
+func (repo *repo) Updates(ctx context.Context, model, updaded interface{}) error {
+	if err := repo.db.Debug().Model(model).Updates(updaded); err != nil {
+		return err
+	}
+	return nil
 }
 
 // delete any given data from models with id
