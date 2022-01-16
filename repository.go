@@ -111,7 +111,7 @@ func (repo *repo) Update(
 }
 
 func (repo *repo) Updates(ctx context.Context, model, updaded interface{}) error {
-	if err := repo.db.Debug().Model(model).Updates(updaded); err != nil {
+	if err := repo.db.Session(&gorm.Session{AllowGlobalUpdate: true}).Debug().Model(model).Updates(updaded); err != nil {
 		return err.Error
 	}
 	return nil
