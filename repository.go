@@ -112,7 +112,7 @@ func (repo *repo) Update(
 
 func (repo *repo) Updates(ctx context.Context, model, updaded interface{}) error {
 	if err := repo.db.Debug().Model(model).Updates(updaded); err != nil {
-		return err
+		return err.Error
 	}
 	return nil
 }
