@@ -11,7 +11,7 @@ import (
 // Generic repo for our differents models
 type Repository interface {
 	Migrate(ctx context.Context, models interface{}) (bool, error)
-	Create(ctx context.Context, models interface{}) (string, error)
+	Create(ctx context.Context, models interface{}) (interface{}, error)
 	GetRows(ctx context.Context, models interface{}) (interface{}, error)
 	Get(ctx context.Context, models interface{}, fields map[string]interface{}) (interface{}, error)
 	GetAll(ctx context.Context, models interface{}) (interface{}, error)
@@ -42,7 +42,7 @@ func (repo *repo) Migrate(ctx context.Context, models interface{}) (bool, error)
 }
 
 // Create data from any given models
-func (repo *repo) Create(ctx context.Context, models interface{}) (string, error) {
+func (repo *repo) Create(ctx context.Context, models interface{}) (interface{}, error) {
 	if err := repo.db.Model(models).Error; err != nil {
 		return "", err
 	}
@@ -51,7 +51,7 @@ func (repo *repo) Create(ctx context.Context, models interface{}) (string, error
 	if tx.Error != nil {
 		return "", tx.Error
 	}
-	return "Data has been created", nil
+	return models, nil
 }
 
 func (repo *repo) GetRows(ctx context.Context, models interface{}) (interface{}, error) {
